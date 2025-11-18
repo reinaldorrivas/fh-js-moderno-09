@@ -1,5 +1,4 @@
-import './style.css'
+import "./style.css";
+import { App } from "./todo/app";
 
-document.querySelector('#app').innerHTML = /* html */`
-  <h1>Hola Mundo</h1>
-`
+App("#app");
