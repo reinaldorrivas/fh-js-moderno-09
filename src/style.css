@@ -32,7 +32,7 @@ body {
   font-weight: 300;
 }
 
-#app {
+#app > div {
   width: min(100%, 1200px);
   margin: 0 auto;
 }
