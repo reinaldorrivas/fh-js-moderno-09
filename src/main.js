@@ -1,4 +1,4 @@
 import "./style.css";
-import { App } from "./todo/app";
+import { App } from "./todos/app";
 
 App("#app");
