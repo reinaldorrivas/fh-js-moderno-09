@@ -10,5 +10,9 @@
   },
   "devDependencies": {
     "vite": "^7.2.2"
+  },
+  "dependencies": {
+    "install": "^0.13.0",
+    "uuid": "^13.0.0"
   }
 }

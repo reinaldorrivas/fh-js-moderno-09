@@ -8,16 +8,16 @@ const Filters = {
 
 const state = {
   todos: [
-    new Todo("Pedra del alma."),
-    new Todo("Pedra del infinito."),
-    new Todo("Pedra del tiempo."),
+    new Todo("Piedra del alma."),
+    new Todo("Piedra del infinito."),
+    new Todo("Piedra del tiempo."),
   ],
 
   filter: Filters.All,
 };
 
 const initStore = () => {
-  console.table({ initStore: state });
+  console.log({ initStore: state });
 };
 
 export default {
