@@ -18,9 +18,8 @@ export const App = (elementId) => {
   };
 
   (() => {
-    const app = document.createElement("div");
+    const app = document.body.querySelector(elementId);
     app.innerHTML = html;
-    document.body.querySelector(elementId).append(app);
 
     renderTodos();
   })();
