@@ -84,12 +84,12 @@ const deleteTodo = (todoId) => {
 };
 
 const deleteCompleted = () => {
-  state.todos.filter((todo) => todo.done);
+  state.todos.filter((todo) => !todo.done);
 };
 
 /**
  *
- * @param {string} filter
+ * @param {Filters} newFilter
  */
 const setFilter = (newFilter = Filters.All) => {
   if (
