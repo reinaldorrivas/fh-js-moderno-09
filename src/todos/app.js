@@ -1,6 +1,6 @@
 import todoStore from "../store/todo.store";
 import html from "./app.html?raw";
-import { todoBuilder } from "./models/use-cases";
+import { todoBuilder } from "./use-cases";
 
 const ElementNames = {
   TodoList: ".todo-list",
