@@ -8,10 +8,22 @@ import todoTemplate from "./todoTemplate.html?raw";
 export const buildTodoHTML = (todo) => {
   if (!todo) throw new Error("A TODO object is required.");
 
+  const { done, description, id } = todo;
+
   const todoElement = document.createElement("li");
 
   todoElement.innerHTML = todoTemplate;
-  todoElement.querySelector("label").textContent = todo.description;
+
+  todoElement.dataset.id = id;
+  todoElement.querySelector(".toggle").checked = done;
+  todoElement.querySelector("label").textContent = description;
+  todoElement.querySelector("label").htmlFor = id;
+  todoElement.querySelector(".edit").id = id;
+  todoElement.querySelector(".edit").name = id;
+
+  if (done) {
+    todoElement.classList.add("completed");
+  }
 
   return todoElement;
 };
