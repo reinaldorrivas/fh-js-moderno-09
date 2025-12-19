@@ -80,11 +80,11 @@ const toggleTodo = (todoId) => {
  * @param {string} todoId
  */
 const deleteTodo = (todoId) => {
-  state.todos.filter((todo) => todo.id !== todoId);
+  state.todos = state.todos.filter((todo) => todo.id !== todoId);
 };
 
 const deleteCompleted = () => {
-  state.todos.filter((todo) => !todo.done);
+  state.todos = state.todos.filter((todo) => !todo.done);
 };
 
 /**
