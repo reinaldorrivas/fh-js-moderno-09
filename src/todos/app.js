@@ -27,6 +27,7 @@ export const App = (elementId) => {
 
   // HTML References
   const newDescriptionInput = document.querySelector(ElementNames.NewTodoInput);
+  const todoListUL = document.querySelector(ElementNames.TodoList);
 
   // listeners
   newDescriptionInput.addEventListener("keyup", (event) => {
@@ -35,5 +36,19 @@ export const App = (elementId) => {
     todoStore.addTodo(event.target.value);
     renderTodos();
     event.target.value = "";
+  });
+
+  todoListUL.addEventListener("click", (event) => {
+    const parentElement = event.target.closest("[data-id]");
+
+    if (event.target.className === "toogle") {
+      todoStore.toggleTodo(parentElement.dataset.id);
+    }
+
+    if (event.target.className === "destroy") {
+      todoStore.deleteTodo(parentElement.dataset.id);
+    }
+
+    renderTodos();
   });
 };
