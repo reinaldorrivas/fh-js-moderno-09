@@ -1,10 +1,12 @@
-import todoStore from "../store/todo.store";
+import todoStore, { Filters } from "../store/todo.store";
 import html from "./app.html?raw";
 import { todoBuilder } from "./use-cases";
 
 const ElementNames = {
   TodoList: ".todo-list",
   NewTodoInput: "#new-todo-input",
+  ClearCompleted: ".clear-completed",
+  FiltersList: ".filters",
 };
 
 /**
@@ -28,6 +30,8 @@ export const App = (elementId) => {
   // HTML References
   const newDescriptionInput = document.querySelector(ElementNames.NewTodoInput);
   const todoListUL = document.querySelector(ElementNames.TodoList);
+  const clearCompletedBtn = document.querySelector(ElementNames.ClearCompleted);
+  const filtersUL = document.querySelector(ElementNames.FiltersList);
 
   // listeners
   newDescriptionInput.addEventListener("keyup", (event) => {
@@ -41,13 +45,52 @@ export const App = (elementId) => {
   todoListUL.addEventListener("click", (event) => {
     const parentElement = event.target.closest("[data-id]");
 
-    if (event.target.className === "toogle") {
-      todoStore.toggleTodo(parentElement.dataset.id);
+    switch (event.target.className) {
+      case "toggle":
+        todoStore.toggleTodo(parentElement.dataset.id);
+        break;
+
+      case "destroy":
+        todoStore.deleteTodo(parentElement.dataset.id);
+        break;
     }
 
-    if (event.target.className === "destroy") {
-      todoStore.deleteTodo(parentElement.dataset.id);
+    renderTodos();
+  });
+
+  filtersUL.addEventListener("click", (event) => {
+    const selectedElement = event.target.getAttribute("href");
+    const ulChildrenElements = filtersUL.querySelectorAll(".filtro");
+
+    ulChildrenElements.forEach((ulChildElement) => {
+      const hrefToCompare = ulChildElement.getAttribute("href");
+
+      if (selectedElement === hrefToCompare) {
+        ulChildElement.classList.add("selected");
+      } else {
+        ulChildElement.classList.remove("selected");
+      }
+    });
+
+    switch (selectedElement) {
+      case "#/":
+        todoStore.setFilter(Filters.All);
+        break;
+
+      case "#/active":
+        todoStore.setFilter(Filters.Pending);
+        break;
+
+      case "#/completed":
+        todoStore.setFilter(Filters.Completed);
+        break;
     }
+
+    renderTodos();
+  });
+
+  clearCompletedBtn.addEventListener("click", () => {
+    todoStore.deleteCompleted();
 
     renderTodos();
   });

@@ -1,6 +1,6 @@
 import { Todo } from "../todos/models/todo.model";
 
-const Filters = {
+export const Filters = {
   All: "all",
   Completed: "completed",
   Pending: "pending",
@@ -9,26 +9,34 @@ const Filters = {
 Object.freeze(Filters);
 
 const state = {
-  todos: [
-    new Todo("Piedra del poder."),
-    new Todo("Piedra del tiempo."),
-    new Todo("Piedra de la mente."),
-    new Todo("Piedra del espacio."),
-    new Todo("Piedra de la realidad."),
-    new Todo("Piedra del alma."),
-  ],
-
+  todos: [],
   filter: Filters.All,
 };
 
 Object.seal(state);
 
 const initStore = () => {
-  console.log({ initStore: state });
+  if (!localStorage.getItem("state")) return;
+
+  const { todos = [], filter = Filters.All } = JSON.parse(
+    localStorage.getItem("state")
+  );
+
+  todos.forEach((todo) => {
+    state.todos.push(new Todo(todo.description));
+  });
+
+  todos.forEach((todo, index) => {
+    if (todo.done) {
+      state.todos[index].done = true;
+    }
+  });
+
+  state.filter = filter;
 };
 
-const loadStore = () => {
-  throw new Error("Not implemented");
+const saveStateToLocalStorage = () => {
+  localStorage.setItem("state", JSON.stringify(state));
 };
 
 /**
@@ -59,6 +67,8 @@ const addTodo = (description) => {
   if (!description) throw new Error("Description is required.");
 
   state.todos.push(new Todo(description));
+
+  saveStateToLocalStorage();
 };
 
 /**
@@ -73,6 +83,8 @@ const toggleTodo = (todoId) => {
 
     return todo;
   });
+
+  saveStateToLocalStorage();
 };
 
 /**
@@ -81,10 +93,14 @@ const toggleTodo = (todoId) => {
  */
 const deleteTodo = (todoId) => {
   state.todos = state.todos.filter((todo) => todo.id !== todoId);
+
+  saveStateToLocalStorage();
 };
 
 const deleteCompleted = () => {
   state.todos = state.todos.filter((todo) => !todo.done);
+
+  saveStateToLocalStorage();
 };
 
 /**
@@ -93,13 +109,15 @@ const deleteCompleted = () => {
  */
 const setFilter = (newFilter = Filters.All) => {
   if (
-    newFilter !== Filters.All ||
-    newFilter !== Filters.Completed ||
+    newFilter !== Filters.All &&
+    newFilter !== Filters.Completed &&
     newFilter !== Filters.Pending
   )
     throw new Error(`Option ${newFilter} is not valid.`);
 
   state.filter = newFilter;
+
+  saveStateToLocalStorage();
 };
 
 const getCurrentFilter = () => {
@@ -113,7 +131,6 @@ export default {
   getCurrentFilter,
   getTodos,
   initStore,
-  loadStore,
   setFilter,
   toggleTodo,
 };
